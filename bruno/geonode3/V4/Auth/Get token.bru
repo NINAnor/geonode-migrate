@@ -1,0 +1,28 @@
+meta {
+  name: Get token
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{ BASE_URL }}o/token/
+  body: formUrlEncoded
+  auth: basic
+}
+
+auth:basic {
+  username: {{ CLIENT_ID }}
+  password: {{ CLIENT_SECRET }}
+}
+
+body:json {
+  {
+    "grant_type": "",
+    "client_id": "{{ CLIENT_ID }}",
+    "client_secret": "{{ CLIENT_SECRET }}"
+  }
+}
+
+body:form-urlencoded {
+  grant_type: client_credentials
+}

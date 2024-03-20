@@ -1,0 +1,22 @@
+meta {
+  name: Login
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{ BASE_URL }}account/login/
+  body: formUrlEncoded
+  auth: none
+}
+
+headers {
+  X-CSRFToken: {{ CSRF }}
+  Cookie: csrftoken={{ CSRF}}
+}
+
+body:form-urlencoded {
+  login: {{ USER }}
+  password: {{ PASSWORD }}
+  csrfmiddlewaretoken: {{ CSRF }}
+}

@@ -1,0 +1,16 @@
+meta {
+  name: styles
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{ BASE_URL }}geoserver/rest/styles
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: admin
+  password: {{ GEOSERVER_PASSWORD }}
+}

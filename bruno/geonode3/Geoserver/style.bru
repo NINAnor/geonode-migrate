@@ -1,0 +1,16 @@
+meta {
+  name: style
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{ BASE_URL }}geoserver/rest/styles/landcover_census_agriculture_area.json
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: admin
+  password: {{ GEOSERVER_PASSWORD }}
+}

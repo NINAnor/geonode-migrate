@@ -1,0 +1,16 @@
+meta {
+  name: API base geoserver
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{ BASE_URL }}geoserver/rest/index
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: admin
+  password: password
+}

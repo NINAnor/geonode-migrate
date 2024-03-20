@@ -1,0 +1,16 @@
+meta {
+  name: resource
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{ BASE_URL }}geoserver/rest/workspaces/geonode/coveragestores/lc81980182015183lgn00_lst.json
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: admin
+  password: {{ GEOSERVER_PASSWORD }}
+}
