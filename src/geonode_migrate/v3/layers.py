@@ -25,6 +25,10 @@ def pull_layers(conf: Config):
     click.echo(f"Found layers: {data['meta']['total_count']}")
 
     for doc in data['objects']:
+        if not conf.force and table.contains(doc_id=doc['id']):
+            click.echo(f'already downloaded {doc["id"]} - {doc["title"]}')
+            continue
+
         response = conf.session.get(f'{conf.base_url}/api/layers/{doc["id"]}')
         data = response.json()
 

@@ -1,9 +1,6 @@
 from ..config import Config
 from tinydb.database import Document
-from pathlib import Path
 import click
-import zipfile
-import io
 
 
 def pull_users(conf: Config):
@@ -15,6 +12,25 @@ def pull_users(conf: Config):
     click.echo(f"Found users: {data['meta']['total_count']}")
 
     for doc in data['objects']:
-        table.upsert(Document(doc, doc_id=doc['id']))
+        if not conf.force and table.contains(doc_id=doc['id']):
+            click.echo(f'already downloaded {doc["id"]} - {doc["title"]}')
+            continue
 
+        table.upsert(Document(doc, doc_id=doc['id']))
         click.echo(f'downloaded {doc["id"]} - {doc["username"]}')
+    
+    response = conf.session.get(f'{conf.base_url}/api/groups/')
+    data = response.json()
+
+    table = conf.db.table('groups')
+
+    click.echo(f"Found groups: {data['meta']['total_count']}")
+
+    for doc in data['objects']:
+        if not conf.force and table.contains(doc_id=doc['id']):
+            click.echo(f'already downloaded {doc["id"]} - {doc["title"]}')
+            continue
+
+        table.upsert(Document(doc, doc_id=doc['id']))
+        click.echo(f'downloaded {doc["id"]} - {doc["name"]}')
+

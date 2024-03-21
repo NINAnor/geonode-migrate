@@ -11,13 +11,14 @@ from .utils import get_csrf_token
 env = environ.Env()
 
 class Config:
-    def __init__(self, *args, base_url, db_path = "db.json", output = "data", **kwargs) -> None:
+    def __init__(self, *args, base_url, db_path = "db.json", output = "data", force=False, **kwargs) -> None:
         self.base_url = base_url
         self.url = urllib.parse.urlparse(self.base_url)
         self.db_path = db_path
         self.output_path = pathlib.Path(output)
         self.output_path.mkdir(parents=True, exist_ok=True)
         self.db = TinyDB(str(self.output_path / self.db_path))
+        self.force = force
 
     def login(self, version=3):
         self.session = requests.Session()

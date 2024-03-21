@@ -13,6 +13,10 @@ def pull_documents(conf: Config):
     docs_dir.mkdir(parents=True, exist_ok=True)
 
     for doc in data['objects']:
+        if not conf.force and docs_table.contains(doc_id=doc['id']):
+            click.echo(f'already downloaded {doc["id"]} - {doc["title"]}')
+            continue
+
         response = conf.session.get(f'{conf.base_url}/api/documents/{doc["id"]}')
         doc_data = response.json()
 
