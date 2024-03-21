@@ -50,3 +50,13 @@ def download_users(ctx):
 def download_maps(ctx):
     conf = ctx.obj['config']
     pull_maps(conf)
+
+
+@v3.command()
+@click.pass_context
+def download(ctx):
+    conf = ctx.obj['config']
+    pull_users(conf)
+    pull_layers(conf)
+    pull_documents(conf)
+    pull_maps(conf)
