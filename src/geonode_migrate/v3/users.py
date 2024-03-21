@@ -1,4 +1,5 @@
 from ..config import Config
+from ..utils import generate_password
 from tinydb.database import Document
 import click
 
@@ -15,6 +16,8 @@ def pull_users(conf: Config):
         if not conf.force and table.contains(doc_id=doc['id']):
             click.echo(f'already downloaded {doc["id"]} - {doc["title"]}')
             continue
+
+        doc['password'] = generate_password()
 
         table.upsert(Document(doc, doc_id=doc['id']))
         click.echo(f'downloaded {doc["id"]} - {doc["username"]}')
