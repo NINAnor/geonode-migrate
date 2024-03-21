@@ -1,6 +1,7 @@
 from ..config import Config
 from tinydb.database import Document
 from pathlib import Path
+import click
 
 def pull_documents(conf: Config):
     # TODO: handle pagination
@@ -12,7 +13,7 @@ def pull_documents(conf: Config):
     docs_dir.mkdir(parents=True, exist_ok=True)
 
     for doc in data['objects']:
-        response = conf.session.get(f'{conf.base_url}/api{doc["detail_url"]}')
+        response = conf.session.get(f'{conf.base_url}/api/documents/{doc["id"]}')
         doc_data = response.json()
 
         del doc_data['csw_anytext']
@@ -25,7 +26,9 @@ def pull_documents(conf: Config):
 
         doc_data["file_position"] = str(docs_dir / title)
 
-        docs_table.upsert(Document(doc_data, doc_id=doc_data['id']))
-        response = conf.session.get(conf.base_url + doc_data['doc_file'])
+        response = conf.session.get(f"{conf.base_url}/documents/{doc_data['id']}/download")
         with open(doc_data["file_position"], 'wb') as f:
             f.write(response.content)
+
+        docs_table.upsert(Document(doc_data, doc_id=doc_data['id']))
+        click.echo(f'downloaded {doc["id"]} - {doc["title"]}')
