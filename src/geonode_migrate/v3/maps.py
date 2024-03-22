@@ -7,7 +7,7 @@ def pull_maps(conf: Config):
     response = conf.session.get(f'{conf.base_url}/api/maps/')
     data = response.json()
 
-    table = conf.db.table('users')
+    table = conf.db.table('maps')
 
     click.echo(f"Found users: {data['meta']['total_count']}")
 
