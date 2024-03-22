@@ -14,7 +14,7 @@ def pull_users(conf: Config):
 
     for doc in data['objects']:
         if not conf.force and table.contains(doc_id=doc['id']):
-            click.echo(f'already downloaded {doc["id"]} - {doc["title"]}')
+            click.echo(f'already downloaded {doc["id"]} - {doc["username"]}')
             continue
 
         doc['password'] = generate_password()
@@ -35,5 +35,5 @@ def pull_users(conf: Config):
             continue
 
         table.upsert(Document(doc, doc_id=doc['id']))
-        click.echo(f'downloaded {doc["id"]} - {doc["name"]}')
+        click.echo(f'downloaded {doc["id"]} - {doc["title"]}')
 
