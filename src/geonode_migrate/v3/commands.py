@@ -6,14 +6,12 @@ from .users import pull_users
 from .maps import pull_maps
 
 @click.group()
-@click.option('-u', '--url', required=True, help="URL of the Geonode 3 instance")
 @click.option('-o', '--output', default='data')
 @click.option('-f', '--force', default=False)
 @click.pass_context
-def v3(ctx, url, output, force):
+def v3(ctx, output, force):
     ctx.ensure_object(dict)
     conf = Config(
-        base_url=url,
         output=output,
         force=force,
     )

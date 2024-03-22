@@ -4,13 +4,11 @@ from .documents import push_documents
 from .layers import push_layers
 
 @click.group()
-@click.option('-u', '--url', required=True, help="URL of the Geonode 4 instance")
 @click.option('-o', '--output', default='data')
 @click.pass_context
-def v4(ctx, url, output):
+def v4(ctx, output):
     ctx.ensure_object(dict)
     conf = Config(
-        base_url=url,
         output=output,
     )
     conf.login(version=4)

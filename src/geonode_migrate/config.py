@@ -2,7 +2,6 @@ from tinydb import TinyDB
 import requests
 import pathlib
 import logging
-import urllib
 import environ
 import click
 
@@ -11,9 +10,7 @@ from .utils import get_csrf_token
 env = environ.Env()
 
 class Config:
-    def __init__(self, *args, base_url, db_path = "db.json", output = "data", force=False, **kwargs) -> None:
-        self.base_url = base_url
-        self.url = urllib.parse.urlparse(self.base_url)
+    def __init__(self, *args, db_path = "db.json", output = "data", force=False, **kwargs) -> None:
         self.db_path = db_path
         self.output_path = pathlib.Path(output)
         self.output_path.mkdir(parents=True, exist_ok=True)
@@ -21,6 +18,7 @@ class Config:
         self.force = force
 
     def login(self, version=3):
+        self.base_url = env(f'GEONODE_V{version}_URL')
         self.session = requests.Session()
         self.geonode_user = env(f'GEONODE_V{version}_USER', default=None)
         self.geonode_password = env(f'GEONODE_V{version}_PASSWORD', default=None)
