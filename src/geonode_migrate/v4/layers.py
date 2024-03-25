@@ -26,7 +26,7 @@ def check_execution(conf, id):
 
 def push_layers(conf: Config):
     table = conf.db.table('layers')
-    for d in table.all()[:10]:
+    for d in table.all():
         if '__new_id__' in d and not conf.force:
             print('already uploaded')
             continue

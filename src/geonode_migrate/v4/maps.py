@@ -7,7 +7,7 @@ import json
 
 def push_maps(conf: Config):
     table = conf.db.table('maps')
-    for d in table.all()[:1]:
+    for d in table.all():
         if '__new_id__' in d and not conf.force:
             print('already uploaded')
             continue
