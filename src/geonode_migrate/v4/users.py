@@ -7,7 +7,7 @@ import click
 def push_users(conf: Config):
     table = conf.db.table('users')
     for d in table.all():
-        if '__new_id__' in d:
+        if '__new_id__' in d and not conf.force:
             click.echo(f'already uploaded {d["username"]}')
             continue
 
