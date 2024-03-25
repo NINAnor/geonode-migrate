@@ -8,6 +8,10 @@ def push_documents(conf: Config):
     table = conf.db.table('documents')
     for d in table.all():
         with open(d['file_position'], 'rb') as f:
+            if '__new_id__' in d and not conf.force:
+                print('already uploaded')
+                continue
+
             csrf, response = get_csrf_token(conf.session, f'{conf.base_url}/')
             conf.session.headers.update({'X-Csrftoken': csrf})
 
@@ -21,10 +25,11 @@ def push_documents(conf: Config):
                 id = content['url'].split('/')[-1]
 
                 conf.session.patch(f'{conf.base_url}/api/v2/documents/{id}/', json={
-                    'abstract': d['abstract']
+                    'abstract': d['abstract'],
+                    'title': d['title'],
                 })
 
-                table.upsert(Document({'__upload__': True }), doc_id=d['id'])
+                table.upsert(Document({'__upload__': True, '__new_id__': id }), doc_id=d['id'])
                 click.echo(f'uploaded {d["title"]}')
             except Exception:
                 click.echo(f'error uploading {d["title"]}')
