@@ -1,0 +1,123 @@
+{
+    "title": "{{ title }}",
+    "data": {
+        "version": 2,
+        "catalogServices": {
+            "services": {
+                "GeoNode Catalogue": {
+                    "url": "{{ base_url }}/catalogue/csw",
+                    "type": "csw",
+                    "title": "GeoNode Catalogue",
+                    "autoload": true,
+                    "layerOptions": {
+                        "tileSize": 512
+                    }
+                }
+            },
+            "selectedService": "GeoNode Catalogue"
+        },
+        "widgetsConfig": {
+            "layouts": {
+                "md": []
+            }
+        },
+        "mapInfoConfiguration": {
+            "trigger": "click"
+        },
+        "dimensionData": {},
+        "timelineData": {
+            "snapRadioButtonEnabled": false
+        },
+        "map": {
+            "center": {
+                "x": {{ center_x }},
+                "y": {{ center_y }},
+                "crs": "{{ crs }}"
+            },
+            "maxExtent": [
+                -20037508.34,
+                -20037508.34,
+                20037508.34,
+                20037508.34
+            ],
+            "projection": "EPSG:3857",
+            "units": "m",
+            "zoom": {{ zoom }},
+            "mapOptions": {},
+            "layers": [
+                {
+                    "id": "mapnik__0",
+                    "group": "background",
+                    "source": "osm",
+                    "name": "mapnik",
+                    "title": "Open Street Map",
+                    "type": "osm",
+                    "visibility": true,
+                    "singleTile": false,
+                    "dimensions": [],
+                    "hideLoading": false,
+                    "handleClickOnLayer": false,
+                    "useForElevation": false,
+                    "hidden": false
+                },
+                {
+                    "id": "OpenTopoMap__1",
+                    "group": "background",
+                    "source": "OpenTopoMap",
+                    "name": "OpenTopoMap",
+                    "provider": "OpenTopoMap",
+                    "title": "OpenTopoMap",
+                    "type": "tileprovider",
+                    "visibility": false,
+                    "singleTile": false,
+                    "dimensions": [],
+                    "hideLoading": false,
+                    "handleClickOnLayer": false,
+                    "useForElevation": false,
+                    "hidden": false
+                },
+                {
+                    "id": "s2cloudless",
+                    "format": "image/jpeg",
+                    "thumbURL": "http://localhost:8000/static/mapstorestyle/img/s2cloudless-s2cloudless.png",
+                    "group": "background",
+                    "name": "s2cloudless:s2cloudless",
+                    "title": "Sentinel-2 cloudless - https://s2maps.eu",
+                    "type": "wms",
+                    "url": "https://maps.geosolutionsgroup.com/geoserver/wms",
+                    "visibility": false,
+                    "singleTile": false,
+                    "dimensions": [],
+                    "hideLoading": false,
+                    "handleClickOnLayer": false,
+                    "useForElevation": false,
+                    "hidden": false
+                },
+                {
+                    "id": "none",
+                    "group": "background",
+                    "source": "ol",
+                    "name": "empty",
+                    "title": "Empty Background",
+                    "type": "empty",
+                    "visibility": false,
+                    "singleTile": false,
+                    "dimensions": [],
+                    "hideLoading": false,
+                    "handleClickOnLayer": false,
+                    "useForElevation": false,
+                    "hidden": false
+                }
+            ],
+            "groups": [
+                {
+                    "id": "Default",
+                    "title": "Default",
+                    "expanded": true
+                }
+            ],
+            "backgrounds": []
+        }
+    },
+    "maplayers": []
+}

@@ -4,10 +4,12 @@ import pathlib
 import logging
 import environ
 import click
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 from .utils import get_csrf_token
 
 env = environ.Env()
+
 
 class Config:
     def __init__(self, *args, db_path = "db.json", output = "data", force=False, **kwargs) -> None:
@@ -16,6 +18,11 @@ class Config:
         self.output_path.mkdir(parents=True, exist_ok=True)
         self.db = TinyDB(str(self.output_path / self.db_path))
         self.force = force
+
+        self.env = Environment(
+            loader=PackageLoader("geonode_migrate"),
+            autoescape=select_autoescape()
+        )
 
     def login(self, version=3):
         self.base_url = env(f'GEONODE_V{version}_URL')
