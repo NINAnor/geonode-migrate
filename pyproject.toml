@@ -22,4 +22,4 @@ license = {text = "MIT"}
 distribution = false
 [tool.pdm.scripts]
 gn-migrate.cmd = "src/main.py"
-gn-migrate.env_file = ".env"
+gn-migrate.env_file.override = ".env"
