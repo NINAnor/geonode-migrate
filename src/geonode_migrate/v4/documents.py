@@ -29,7 +29,7 @@ def push_documents(conf: Config):
                     'title': d['title'],
                 })
 
-                table.upsert(Document({'__upload__': True, '__new_id__': id }), doc_id=d['id'])
+                table.upsert(Document({'__new_id__': id }, doc_id=d['id']))
                 click.echo(f'uploaded {d["title"]}')
-            except Exception:
-                click.echo(f'error uploading {d["title"]}')
+            except Exception as e:
+                click.echo(f'error uploading {d["title"]} - {e}')
