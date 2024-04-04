@@ -1,7 +1,7 @@
 import click
 from ..config import Config
 from .documents import push_documents
-from .layers import push_layers
+from .layers import push_layers, sync_layers as sync_layers_fn
 from .users import push_users
 from .maps import push_maps
 
@@ -37,6 +37,12 @@ def upload_layers(ctx):
 
 @v4.command()
 @click.pass_context
+def sync_layers(ctx):
+    conf = ctx.obj['config']
+    sync_layers_fn(conf)
+
+@v4.command()
+@click.pass_context
 def upload_users(ctx):
     conf = ctx.obj['config']
     push_users(conf)
@@ -54,5 +60,6 @@ def upload_maps(ctx):
 def upload(ctx):
     conf = ctx.obj['config']
     push_users(conf)
+    push_maps(conf)
     push_documents(conf)
     push_layers(conf)
