@@ -1,4 +1,4 @@
-from tinydb import TinyDB
+from tinydb import TinyDB, where
 import requests
 import pathlib
 import logging
@@ -18,6 +18,8 @@ class Config:
         self.output_path.mkdir(parents=True, exist_ok=True)
         self.db = TinyDB(str(self.output_path / self.db_path))
         self.force = force
+
+        self.__user_sessions = {}
 
         self.env = Environment(
             loader=PackageLoader("geonode_migrate"),
@@ -70,3 +72,31 @@ class Config:
             self.session.headers.update({'Authentication': f'Bearer {self.access_token}'})
 
         click.echo(f'successfully logged in geonode - {self.session.cookies}')
+
+    def get_user_session(self, username, version=3):
+        table = self.db.table('users')
+
+        if username in self.__user_sessions:
+            return self.__user_sessions['username']
+
+
+        found = table.search(where('username') == username)
+        if len(found) != 1:
+            raise Exception(f'expected just one user with this username ({username}), found instead: {found}')
+        
+        u = found[0]
+
+        user_session = requests.Session()
+
+        csrf, response = get_csrf_token(session=user_session, url=f'{self.base_url}/account/login/')
+        field = 'login' if version == 4 else 'username'
+        response = user_session.post(f"{self.base_url}/account/login/", f"{field}={username}&password={u['password']}&csrfmiddlewaretoken={csrf}", headers={'Content-Type': 'application/x-www-form-urlencoded'})
+        user_session.headers.update({'X-Csrftoken': csrf})
+
+        if version == 4:
+            response = user_session.get(self.base_url + '/api/o/v4/userinfo')
+            response.raise_for_status()
+            access_token = response.json()['access_token']
+            user_session.headers.update({'Authentication': f'Bearer {access_token}'})
+
+        click.echo(f'successfully logged in geonode - {user_session.cookies}')
