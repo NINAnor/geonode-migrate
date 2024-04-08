@@ -74,15 +74,33 @@ def list_maps(ctx):
 
 
 @manage.command()
-@click.argument('table')
+@click.argument('table', required=False)
+@click.option('--all', is_flag=True)
 @click.pass_context
-def clean_table(ctx, table):
+def clean_table(ctx, table, all):
     conf = ctx.obj['config']
-    conf.db.table(table).update(set('__new_id__', None))
-    conf.db.table(table).update(delete('__new_id__'))
-    if table == 'layers':
-        conf.db.table(table).update(set('__delete_path__', None))
-        conf.db.table(table).update(delete('__delete_path__'))
+    tables = []
+    if all:
+        tables = [
+            'groups',
+            'users',
+            'maps',
+            'document',
+            'layers',
+            'keywords',
+        ]
+    else:
+        tables.append(table)
+
+    for t in tables:
+        tab = conf.db.table(t)
+        tab.update(set('__new_id__', None))
+        tab.update(delete('__new_id__'))
+        if t == 'layers':
+            tab.update(set('__delete_path__', None))
+            tab.update(delete('__delete_path__'))
+
+        print(f'cleaned {t}')
 
 
 @manage.command()
