@@ -3,6 +3,7 @@ from ..config import Config
 from .documents import pull_documents
 from .layers import pull_layers
 from .users import pull_users, pull_groups
+from .keywords import pull_keywords
 from .maps import pull_maps
 
 @click.group()
@@ -35,6 +36,12 @@ def download_layers(ctx):
     pull_layers(conf)
 
 
+@v3.command()
+@click.pass_context
+def download_keywords(ctx):
+    conf = ctx.obj['config']
+    pull_keywords(conf)
+
 
 @v3.command()
 @click.pass_context
@@ -62,6 +69,8 @@ def download_maps(ctx):
 def download(ctx):
     conf = ctx.obj['config']
     pull_users(conf)
+    pull_groups(conf)
+    pull_keywords(conf)
     pull_layers(conf)
     pull_documents(conf)
     pull_maps(conf)
