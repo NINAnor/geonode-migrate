@@ -45,7 +45,7 @@ def get_password(ctx, username):
 def list_layers(ctx):
     conf = ctx.obj['config']
     for l in conf.db.table('layers').all():
-        print(f"{l['id']} - {l['title']} --- {l['__new_id__'] if '__new_id__' in l else 'NOT UPLOADED'}")
+        print(f"{l['id']} - {l['title']} ## {l['__files__']['base_file'].split('/')[-1]} --- {l['__new_id__'] if '__new_id__' in l else 'NOT UPLOADED'}")
 
 
 @manage.command()
