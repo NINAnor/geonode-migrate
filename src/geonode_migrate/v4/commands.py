@@ -7,7 +7,7 @@ from .maps import push_maps
 
 @click.group()
 @click.option('-o', '--output', default='data')
-@click.option('-f', '--force', default=False)
+@click.option('-f', '--force', is_flag=True)
 @click.pass_context
 def v4(ctx, output, force):
     ctx.ensure_object(dict)

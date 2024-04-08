@@ -2,12 +2,12 @@ import click
 from ..config import Config
 from .documents import pull_documents
 from .layers import pull_layers
-from .users import pull_users
+from .users import pull_users, pull_groups
 from .maps import pull_maps
 
 @click.group()
 @click.option('-o', '--output', default='data')
-@click.option('-f', '--force', default=False)
+@click.option('-f', '--force', is_flag=True)
 @click.pass_context
 def v3(ctx, output, force):
     ctx.ensure_object(dict)
@@ -41,6 +41,13 @@ def download_layers(ctx):
 def download_users(ctx):
     conf = ctx.obj['config']
     pull_users(conf)
+
+
+@v3.command()
+@click.pass_context
+def download_groups(ctx):
+    conf = ctx.obj['config']
+    pull_groups(conf)
 
 
 @v3.command()
