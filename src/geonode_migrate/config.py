@@ -99,4 +99,5 @@ class Config:
             access_token = response.json()['access_token']
             user_session.headers.update({'Authentication': f'Bearer {access_token}'})
 
-        click.echo(f'successfully logged in geonode - {user_session.cookies}')
+        click.echo(f'successfully logged in geonode as {username}- {user_session.cookies}')
+        return user_session

@@ -85,7 +85,7 @@ def clean_table(ctx, table, all):
             'groups',
             'users',
             'maps',
-            'document',
+            'documents',
             'layers',
             'keywords',
         ]
