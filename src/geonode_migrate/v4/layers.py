@@ -11,6 +11,10 @@ class FailedUpload(Exception):
         super().__init__(*args)
         self.__response = response
 
+    
+    def get_response(self):
+        return self.__response
+
 
 def get_filename(name):
     fname = pathlib.Path(name)
@@ -56,7 +60,7 @@ def get_layer_id_by_name(conf, filename):
 def push_layers(conf: Config):
     table = conf.db.table('layers')
     for d in table.all():
-        print(f"uploading {d['id']} - {d['title']}")
+        print(f"uploading {d['id']} - {d['title']} ## {d['__files__']['base_file'].split('/')[-1]}")
         if '__new_id__' in d and not conf.force:
             print('already uploaded')
             continue
@@ -91,12 +95,8 @@ def push_layers(conf: Config):
             last = check_execution(conf, exec_id)
         except FailedUpload as e:
             id = 'FAILED'
-            p = e.__response['request']['input_params']['files']['base_file']
-            table.upsert(Document({'__delete_path__': p }, doc_id=d['id']))
-            continue
-
-        except Exception as e:
-            print(e)
+            p = e.get_response()['request']['input_params']['files']['base_file']
+            table.upsert(Document({'__delete_path__': p, '__new_id__': 'FAILED' }, doc_id=d['id']))
             continue
         else:
             output = last['request']['output_params']
@@ -130,7 +130,7 @@ def push_layers(conf: Config):
 def sync_layers(conf: Config):
     table = conf.db.table('layers')
     for d in table.all():
-        print(f"syncing {d['id']} - {d['title']} --- {d['__new_id__'] if '__new_id__' in d else 'NOT UPLOADED'}")
+        print(f"syncing {d['id']} - {d['title']} ## {d['__files__']['base_file'].split('/')[-1]} --- {d['__new_id__'] if '__new_id__' in d else 'NOT UPLOADED'}")
         if '__new_id__' not in d:
             try:
                 id = get_layer_id_by_name(conf, d['__files__']['base_file'])
@@ -140,7 +140,7 @@ def sync_layers(conf: Config):
             except Exception as e:
                 print(e)
                 continue
-        elif d["__new_id__"] == 'FAILED':
+        elif d["__new_id__"] in ['FAILED', 'SKIP']:
             continue
         else:
             id = d["__new_id__"]
