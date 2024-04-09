@@ -166,5 +166,7 @@ def sync_layers(conf: Config):
             response.raise_for_status()
         except:
             print(response.text)
+
+        response = conf.session.post(f'{conf.base_url}/api/v2/extra/admin-set-resource-owner/', json={'username': d['owner']['username'], 'resource_id': id})
         
         print('done')

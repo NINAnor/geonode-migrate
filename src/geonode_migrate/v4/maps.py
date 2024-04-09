@@ -31,7 +31,9 @@ def push_maps(conf: Config):
         )
         response.raise_for_status()
         content = response.json()
+        id = content['map']['pk']
+        response = conf.session.post(f'{conf.base_url}/api/v2/extra/admin-set-resource-owner/', json={'username': d['owner']['username'], 'resource_id': id})
 
-        table.upsert(Document({'__new_id__': content['map']['pk'] }, doc_id=d['id']))
+        table.upsert(Document({'__new_id__': id }, doc_id=d['id']))
         
         print('done')
