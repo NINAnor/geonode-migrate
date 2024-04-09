@@ -87,6 +87,7 @@ class Config:
         u = found[0]
 
         user_session = requests.Session()
+        self.__user_sessions['username'] = user_session
 
         csrf, response = get_csrf_token(session=user_session, url=f'{self.base_url}/account/login/')
         field = 'login' if version == 4 else 'username'
