@@ -7,7 +7,7 @@ import traceback
 
 def push_documents(conf: Config):
     table = conf.db.table('documents')
-    for d in table.all()[:1]:
+    for d in table.all():
         with open(d['file_position'], 'rb') as f:
             if '__new_id__' in d and not conf.force:
                 print('already uploaded')
